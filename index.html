@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constituion</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: #d0e3e3;
+            height: 100vh !IMPORTANT;
+        }
+
+        div#out-number {
+            font-size: 25px;
+            display: block;
+            padding: 15px;
+            background-color: orange;
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        div#output {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        div#out-text {
+            background-color: white;
+            padding: 15px;
+            width: calc(100% - 50px);
+            border-radius: 10px;
+            margin: 15px;
+            text-align: center;
+            display: flex;
+            font-size: 16px;
+            min-height: 200px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button#geneate,
+        button#answer {
+            width: 100%;
+            display: block;
+            background-color: #00a0ff;
+            padding: 15px 20px;
+            margin: 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            border: none;
+            box-shadow: 2px 1px 3px gray;
+            border-radius: 10px;
+            cursor: pointer;
+            color: white;
+        }
+
+        button#answer {
+            background-color: #03a93d;
+        }
+
+        button#answer:disabled {
+            background-color: #bebbbb;
+            cursor: not-allowed;
+            color: #000;
+        }
+
+        .aus-range>input {
+            display: inline-block;
+            width: 40%;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid;
+            font-size: 18px;
+        }
+
+        .aus-range {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="aus-output_holder" id="output">
+            <div class="out-number" id="out-number">
+
+            </div>
+            <div style="opacity: 0;" class="out-text" id="out-text">
+
+            </div>
+        </div>
+        <div class="aus-input-holder">
+            <div class="aus-range">
+                <input min="1" max="160" type="number" value="1" id="aus-lower-limit">
+                <input min="1" max="160" type="number" value="8" id="aus-upper-limit">
+            </div>
+            <div class="aus-generate">
+                <button class="generate-button" id="geneate">
+                    Play
+                </button>
+                <button class="answar_button" id="answer" disabled>
+                    Answer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const data = [
+
+            {
+                "number": "১",
+                "detail": "প্রজাতন্ত্র"
+            },
+            {
+                "number": "২",
+                "detail": "প্রজাতন্ত্রের রাষ্ট্রীয় সীমানা"
+            },
+            {
+                "number": "২ক",
+                "detail": "রাষ্ট্রধর্ম"
+            },
+            {
+                "number": "৩",
+                "detail": "রাষ্ট্রভাষা"
+            },
+            {
+                "number": "৪",
+                "detail": "জাতীয় সঙ্গীত, জাতীয় পতাকা ও জাতীয় প্রতীক"
+            },
+            {
+                "number": "৪ক",
+                "detail": "বঙ্গবন্ধু শেখ মুজিবুর রহমানের প্রতিকৃতি স্থাপন"
+            },
+            {
+                "number": "৫",
+                "detail": " রাজধানী"
+            },
+            {
+                "number": "৬",
+                "detail": "নাগরিকত্ব"
+            },
+            {
+                "number": "৭",
+                "detail": "সংবিধানের প্রাধান্য"
+            },
+            {
+                "number": "৭ক",
+                "detail": "সংবিধান বাতিল, স্থগিতকরণ, ইত্যাদি অপরাধ"
+            },
+            {
+                "number": "৭খ",
+                "detail": "সংবিধানের মৌলিক বিষয়াবলী সংশোধন অযোগ্য। "
+            },
+            {
+                "number": "৮",
+                "detail": "মূলনীতিসমূহ "
+            },
+            {
+                "number": "৯",
+                "detail": "জাতীয়তাবাদ "
+            },
+            {
+                "number": "১০",
+                "detail": "সমাজতন্ত্র ও শোষণমুক্তি"
+            },
+            {
+                "number": "১১",
+                "detail": "গণতন্ত্র ও মানবাধিকার"
+            },
+            {
+                "number": "১২",
+                "detail": "ধর্ম নিরপেক্ষতা ও ধর্মীয় স্বাধীনতা "
+            },
+            {
+                "number": "১৩",
+                "detail": "মালিকানার নীতি "
+            },
+            {
+                "number": "১৪",
+                "detail": "কৃষক ও শ্রমিকের মুক্তি"
+            },
+            {
+                "number": "১৫",
+                "detail": "মৌলিক প্রয়োজনের ব্যবস্থা "
+            },
+            {
+                "number": "১৬",
+                "detail": "গ্রামীণ উন্নয়ন ও কৃষি বিপ্লব"
+            },
+            {
+                "number": "১৭",
+                "detail": "অবৈতনিক ও বাধ্যতামূলক শিক্ষা "
+            },
+            {
+                "number": "১৮",
+                "detail": "অবৈতনিক ও বাধ্যতামূলক শিক্ষা "
+            },
+            {
+                "number": "১৮ক",
+                "detail": "পরিবেশ ও জীব-বৈচিত্র্য সংরক্ষণ ও উন্নয়ন"
+            },
+            {
+                "number": "১৯",
+                "detail": "সুযোগের সমতা"
+            },
+            {
+                "number": "২০",
+                "detail": "অধিকার ও কর্তব্যরূপে কর্ম "
+            },
+            {
+                "number": "২১",
+                "detail": "নাগরিক ও সরকারি কর্মচারীদের কর্তব্য "
+            },
+            {
+                "number": "২২",
+                "detail": "নির্বাহী বিভাগ হইতে বিচার বিভাগের পৃথকীকরণ"
+            },
+            {
+                "number": "২৩",
+                "detail": "জাতীয় সংস্কৃতি"
+            },
+            {
+                "number": "২৩ক",
+                "detail": "উপজাতি, ক্ষুদ্র জাতিসত্তা, নৃ-গোষ্ঠী ও সম্প্রদায়ের সংস্কৃতি "
+            },
+            {
+                "number": "২৪",
+                "detail": "জাতীয় স্মৃতিনিদর্শন প্রভৃতি"
+            },
+            {
+                "number": "২৫",
+                "detail": "আন্তর্জাতিক শান্তি, নিরাপত্তা ও সংহতির উন্নয়ন। "
+            },
+            {
+                "number": "২৬",
+                "detail": "মৌলিক অধিকারের অসামঞ্জস্য আইন বাতিল"
+            },
+            {
+                "number": "২৭",
+                "detail": "আইনের দৃষ্টিতে সমতা"
+            },
+            {
+                "number": "২৮",
+                "detail": "ধর্ম প্রভৃতি কারণে বৈষম্য"
+            },
+            {
+                "number": "২৯",
+                "detail": " সরকারি নিয়োগলাভে সুযোগের সমতা "
+            },
+            {
+                "number": "৩০",
+                "detail": "বিদেশি খেতাব প্রভৃতি গ্রহণ নিষিদ্ধকরণ"
+            },
+            {
+                "number": "৩১",
+                "detail": "আইনের আশ্রয় লাভের অধিকার"
+            },
+            {
+                "number": "৩২",
+                "detail": "জীবন ও ব্যক্তি-স্বাধীনতার অধিকার রক্ষণ "
+            },
+            {
+                "number": "৩৩",
+                "detail": "গ্রেপ্তার ও আটক সম্পর্কে রক্ষাকবচ"
+            },
+            {
+                "number": "৩৪",
+                "detail": "জবরদস্তি-শ্রম নিষিদ্ধকরণ"
+            },
+            {
+                "number": "৩৫",
+                "detail": "বিচার ও দণ্ড সম্পর্কে রক্ষাকবচ"
+            },
+            {
+                "number": "৩৬",
+                "detail": "চলাফেরার স্বাধীনতা "
+            },
+            {
+                "number": "৩৭",
+                "detail": "সমাবেশের স্বাধীনতা "
+            },
+            {
+                "number": "৩৮",
+                "detail": "সংগঠনের স্বাধীনতা"
+            },
+            {
+                "number": "৩৯",
+                "detail": "চিন্তা ও বিবেকের স্বাধীনতা এবং বাক্ স্বাধীনতা"
+            },
+            {
+                "number": "৪০",
+                "detail": "পেশা বা বৃত্তির স্বাধীনতা"
+            },
+            {
+                "number": "৪১",
+                "detail": "ধর্মীয় স্বাধীনতা"
+            },
+            {
+                "number": "৪২",
+                "detail": "সম্পত্তির অধিকার"
+            },
+            {
+                "number": "৪৩",
+                "detail": "গৃহ ও যোগাযোগের রক্ষণ "
+            },
+            {
+                "number": "৪৪",
+                "detail": "মৌলিক অধিকার বলবৎকরণ"
+            },
+            {
+                "number": "৪৫",
+                "detail": "শৃঙ্খলামূলক আইনের ক্ষেত্রে অধিকারের পরিবর্তন"
+            },
+            {
+                "number": "৪৬",
+                "detail": "দায়মুক্তি-বিধানের ক্ষমতা"
+            },
+            {
+                "number": "৪৭",
+                "detail": "কতিপয় আইনের হেফাজত "
+            },
+            {
+                "number": "৪৭ক",
+                "detail": "সংবিধানের কিছু বিধান যেসব ক্ষেত্রে প্রযোজ্য হবে না। "
+            },
+            {
+                "number": "৪৮",
+                "detail": "রাষ্ট্রপতি "
+            },
+            {
+                "number": "৪৯",
+                "detail": "রাষ্ট্রপতি ক্ষমা প্রদর্শনের অধিকার"
+            },
+            {
+                "number": "৫০",
+                "detail": "রাষ্ট্রপতি পদের মেয়াদ "
+            },
+            {
+                "number": "৫১",
+                "detail": "রাষ্ট্রপতির দায়মুক্তি"
+            },
+            {
+                "number": "৫২",
+                "detail": "রাষ্ট্রপতির অভিশংসন"
+            },
+            {
+                "number": "৫৩",
+                "detail": "অসামর্থ্যের কারণে রাষ্ট্রপতির অপসারণ"
+            },
+            {
+                "number": "৫৪",
+                "detail": "অনুপস্থিতি প্রভৃতির কালে রাষ্ট্রপতি-পদে স্পিকার"
+            },
+            {
+                "number": "৫৫",
+                "detail": "মন্ত্রিসভা"
+            },
+            {
+                "number": "৫৬",
+                "detail": "মন্ত্রিগণ"
+            },
+            {
+                "number": "৫৭",
+                "detail": "প্রধানমন্ত্রীর পদের মেয়াদ"
+            },
+            {
+                "number": "৫৮",
+                "detail": "মন্ত্রীর পদের মেয়াদ"
+            },
+            {
+                "number": "৫৯",
+                "detail": "স্থানীয় শাসন "
+            },
+            {
+                "number": "৬০",
+                "detail": "স্থানীয় শাসন-সংক্রান্ত প্রতিষ্ঠানের ক্ষমতা"
+            },
+            {
+                "number": "৬১",
+                "detail": "সর্বাধিনায়ক"
+            },
+            {
+                "number": "৬২",
+                "detail": "প্রতিরক্ষা কর্মবিভাগে ভর্তি প্রভৃতি"
+            },
+            {
+                "number": "৬৩",
+                "detail": "যুদ্ধ"
+            },
+            {
+                "number": "৬৪",
+                "detail": "অ্যাটর্নি জেনারেল"
+            },
+            {
+                "number": "৬৫",
+                "detail": "সংসদ-প্রতিষ্ঠা "
+            },
+            {
+                "number": "৬৬",
+                "detail": "সংসদে নির্বাচিত হইবার যোগ্যতা ও অযোগ্যতা"
+            },
+            {
+                "number": "৬৭",
+                "detail": " সদস্যদের আসন শূন্য হওয়া"
+            },
+            {
+                "number": "৬৮",
+                "detail": "সংসদ সদস্যদের পারিশ্রমিক"
+            },
+            {
+                "number": "৬৯",
+                "detail": "শপথগ্রহণের পূর্বে আসনগ্রহণ বা ভোটদান করিলে সদস্যের অর্থদণ্ড"
+            },
+            {
+                "number": "৭০",
+                "detail": "রাজনৈতিক দল হতে পদত্যাগ বা দলের বিপক্ষে ভোটদানের কারণে আসন শূন্য হওয়া "
+            },
+            {
+                "number": "৭১",
+                "detail": "দ্বৈত-সদস্যতায় বাধা"
+            },
+            {
+                "number": "৭২",
+                "detail": "সংসদের অধিবেশন"
+            },
+            {
+                "number": "৭৩",
+                "detail": "সংসদে রাষ্ট্রপতির ভাষণ ও বাণী"
+            },
+            {
+                "number": "৭৩ক",
+                "detail": "সংসদ সম্পর্কে মন্ত্রিগণের অধিকার"
+            },
+            {
+                "number": "৭৪",
+                "detail": "স্পিকার ও ডেপুটি স্পিকার"
+            },
+            {
+                "number": "৭৫",
+                "detail": "কার্যপ্রণালী-বিধি, কোরাম প্রভৃতি"
+            },
+            {
+                "number": "৭৬",
+                "detail": "সংসদের স্থায়ী কমিটিসমূহ"
+            },
+            {
+                "number": "৭৭",
+                "detail": "ন্যায়পাল"
+            },
+            {
+                "number": "৭৮",
+                "detail": "সংসদ ও সদস্যদের বিশেষ অধিকার ও দায়মুক্তি"
+            },
+            {
+                "number": "৭৯",
+                "detail": "সংসদ সচিবালয় (Secretariat of Parliament)"
+            },
+            {
+                "number": "৮০",
+                "detail": "আইনপ্রণয়ন-পদ্ধতি"
+            },
+            {
+                "number": "৮১",
+                "detail": "অর্থবিল"
+            },
+            {
+                "number": "৮২",
+                "detail": "আর্থিক ব্যবস্থাবলীর সুপারিশ"
+            },
+            {
+                "number": "৮৩",
+                "detail": "সংসদের আইন ব্যতীত কর আরোপ নিষিদ্ধ"
+            },
+            {
+                "number": "৮৪",
+                "detail": "সংযুক্ত তহবিল ও প্রজাতন্ত্রের সরকারি হিসাব"
+            },
+            {
+                "number": "৮৫",
+                "detail": "সরকারি অর্থের নিয়ন্ত্রণ"
+            },
+            {
+                "number": "৮৬",
+                "detail": "প্রজাতন্ত্রের সরকারি হিসেবে প্রদেয় অর্থ"
+            },
+            {
+                "number": "৮৭",
+                "detail": "বার্ষিক আর্থিক বিবৃতি"
+            },
+            {
+                "number": "৮৮",
+                "detail": "সংযুক্ত তহবিলের উপর দায়"
+            },
+            {
+                "number": "৮৯",
+                "detail": "বার্ষিক আর্থিক বিবৃতি সম্পর্কিত পদ্ধতি"
+            },
+            {
+                "number": "৯০",
+                "detail": "নির্দিষ্টকরণ হিসাব"
+            },
+            {
+                "number": "৯১",
+                "detail": "সম্পূরক ও অতিরিক্ত মঞ্জুরী "
+            },
+            {
+                "number": "৯২",
+                "detail": "হিসাব ,  ঋণ প্রভৃতির উপর ভোট"
+            },
+            {
+                "number": "৯৩ ",
+                "detail": "অধ্যাদেশ প্রণয়ন-ক্ষমতা "
+            },
+
+            {
+                "number": "৯৪",
+                "detail": "সুপ্রীম কোর্টের প্রতিষ্ঠা"
+            },
+            {
+                "number": "৯৫",
+                "detail": "বিচারক নিয়োগ"
+            },
+            {
+                "number": "৯৬",
+                "detail": "বিচারকদের পদের মেয়াদ"
+            },
+            {
+                "number": "৯৬(৩)",
+                "detail": "সুপ্রীম জুডিসিয়াল কাউন্সিল"
+            },
+            {
+                "number": "৯৬(৪)",
+                "detail": "সুপ্রীম জুডিসিয়াল কাউন্সিলের দায়িত্ব ও ক্ষমতা"
+            },
+            {
+                "number": "৯৭",
+                "detail": "স্থায়ী প্রধান বিচারপতি"
+            },
+            {
+                "number": "৯৮",
+                "detail": "সুপ্রীম কোর্টের অতিরিক্ত বিচারক"
+            },
+            {
+                "number": "৯৯",
+                "detail": "অবসর গ্রহণের পর বিচারকগণের অক্ষমতা"
+            },
+            {
+                "number": "১০০",
+                "detail": "সুপ্রীম কোর্টের আসন"
+            },
+            {
+                "number": "১০১",
+                "detail": "হাইকোর্ট বিভাগের এখতিয়ার"
+            },
+            {
+                "number": "১০২",
+                "detail": "হাইকোর্ট এর ক্ষমতা "
+            },
+            {
+                "number": "১০৩",
+                "detail": "আপীল বিভাগের ক্ষমতা "
+            },
+            {
+                "number": "১০৪",
+                "detail": "আপীল বিভাগের পরোয়ানা জারী ও প্রয়োগ"
+            },
+            {
+                "number": "১০৫",
+                "detail": "আপীল বিভাগ কর্তৃক রায় বা আদেশ পুনর্বিবেচনা"
+            },
+            {
+                "number": "১০৬",
+                "detail": "সুপ্রীম কোর্টের উপদেষ্টামূলক এখতিয়ার "
+            },
+            {
+                "number": "১০৭",
+                "detail": "সুপ্রিম কোর্টের বিধিপ্ৰণয়ন-ক্ষমতা"
+            },
+            {
+                "number": "১০৮",
+                "detail": "“কোর্ট অব রেকর্ড\" রূপে সুপ্রীম কোর্ট"
+            },
+            {
+                "number": "১০৯",
+                "detail": "আদালতসমূহের উপর তত্ত্বাবধায়ন ও নিয়ন্ত্রণ "
+            },
+            {
+                "number": "১১০",
+                "detail": "অধস্তন আদালত হইতে হাইকোর্ট বিভাগে মামলা স্থানান্তর"
+            },
+            {
+                "number": "১১১",
+                "detail": "সুপ্রিম কোর্টের রায়ের বাধ্যতামূলক"
+            },
+            {
+                "number": "১১২",
+                "detail": "সুপ্রীম কোর্টের সহায়তা"
+            },
+            {
+                "number": "১১৩",
+                "detail": "সুপ্রীম কোর্টের কর্মচারীগণ"
+            },
+            {
+                "number": "১১৪",
+                "detail": "অধস্তন বা নিম্ন আদালতসমূহ প্রতিষ্ঠা"
+            },
+            {
+                "number": "১১৫",
+                "detail": "অধস্তন আদালতে নিয়োগ"
+            },
+            {
+                "number": "১১৬",
+                "detail": "অধস্তন আদালতসমূহের নিয়ন্ত্রণ ও শৃঙ্খলা"
+            },
+            {
+                "number": "১১৬ক",
+                "detail": "বিচারবিভাগীয় কর্মচারীগণ বিচারকার্য পালনের ক্ষেত্রে স্বাধীনতা"
+            },
+            {
+                "number": "১১৭",
+                "detail": "প্রশাসনিক ট্রাইব্যুনালসমূহ"
+            },
+
+            {
+                "number": "১১৮",
+                "detail": "নির্বাচন কমিশন প্রতিষ্ঠা"
+            },
+            {
+                "number": "১১৯",
+                "detail": "নির্বাচন কমিশনের দায়িত্ব"
+            },
+            {
+                "number": "১২০",
+                "detail": "নির্বাচন কমিশনের কর্মচারীগণ"
+            },
+            {
+                "number": "১২১",
+                "detail": "প্রতি এলাকার জন্য একটিমাত্র ভোটার তালিকা"
+            },
+            {
+                "number": "১২২",
+                "detail": "ভোটার হওয়ার যোগ্যতা"
+            },
+            {
+                "number": "১২৩",
+                "detail": "নির্বাচন-অনুষ্ঠানের সময়"
+            },
+            {
+                "number": "১২৪",
+                "detail": "নির্বাচন সম্পর্কে সংসদের বিধান প্রণয়নের ক্ষমতা"
+            },
+            {
+                "number": "১২৫",
+                "detail": "নির্বাচনী আইন ও নির্বাচনের বৈধতা"
+            },
+            {
+                "number": "১২৬",
+                "detail": "নির্বাচন কমিশনকে নির্বাহী কর্তৃপক্ষের সহায়তা"
+            },
+
+            {
+                "number": "১২৭",
+                "detail": "মহা হিসাব-নিরীক্ষক পদের প্রতিষ্ঠা"
+            },
+            {
+                "number": "১২৮",
+                "detail": "মহা হিসাব-নিরীক্ষকের দায়িত্ব"
+            },
+            {
+                "number": "১২৯",
+                "detail": "মহা হিসাব-নিরীক্ষকের কর্মের মেয়াদ"
+            },
+            {
+                "number": "১৩০",
+                "detail": "অস্থায়ী মহা হিসাব-নিরীক্ষক"
+            },
+            {
+                "number": "১৩১",
+                "detail": "প্রজাতন্ত্রের হিসাব রক্ষার আকার ও পদ্ধতি"
+            },
+            {
+                "number": "১৩২",
+                "detail": " সংসদে মহা হিসাব-নিরীক্ষকের রিপোর্ট উপস্থাপন"
+            },
+
+            {
+                "number": "১৩৩",
+                "detail": "নিয়োগ ও কর্মের শর্তাবলী"
+            },
+            {
+                "number": "১৩৪",
+                "detail": "কর্মের মেয়াদ"
+            },
+            {
+                "number": "১৩৫",
+                "detail": "অসামরিক সরকারি কর্মচারীদের বরখাস্ত প্রভৃতি"
+            },
+            {
+                "number": "১৩৬",
+                "detail": "কর্মবিভাগ-পুনর্গঠন"
+            },
+            {
+                "number": "১৩৭",
+                "detail": "কর্ম কমিশন প্রতিষ্ঠা"
+            },
+            {
+                "number": "১৩৮",
+                "detail": "সদস্য নিয়োগ"
+            },
+            {
+                "number": "১৩৯",
+                "detail": "পদের মেয়াদ"
+            },
+            {
+                "number": "১৪০",
+                "detail": "কমিশনের দায়িত্ব"
+            },
+            {
+                "number": "১৪১",
+                "detail": "বার্ষিক রিপোর্ট "
+            },
+            {
+                "number": "১৪১(ক)",
+                "detail": "জরুরী অবস্থা ঘোষণা"
+            },
+            {
+                "number": "১৪১(খ)",
+                "detail": "জরুরী অবস্থার সময় কতিপয় অনুচ্ছেদের বিধান স্থগিতকরণ"
+            },
+            {
+                "number": "১৪১(গ)",
+                "detail": "জরুরি অবস্থায় মৌলিক অধিকার স্থগিতকরণ"
+            },
+            {
+                "number": "১৪২",
+                "detail": "সংবিধান সংশোধনের ক্ষমতা"
+            },
+
+            {
+                "number": "১৪৩",
+                "detail": "প্রজাতন্ত্রের সম্পত্তি "
+            },
+            {
+                "number": "১৪৪",
+                "detail": "সম্পত্তি ও কারবার প্রভৃতি-প্রসঙ্গে নির্বাহী কর্তৃত্ব"
+            },
+            {
+                "number": "১৪৫",
+                "detail": "চুক্তি ও দলিল"
+            },
+            {
+                "number": "১৪৫(ক) ",
+                "detail": "আন্তর্জাতিক চুক্তি"
+            },
+            {
+                "number": "১৪৬",
+                "detail": "বাংলাদেশের নামে মামলা"
+            },
+            {
+                "number": "১৪৭",
+                "detail": "কতিপয় পদাধিকারীর পারিশ্রমিক প্রভৃতি"
+            },
+            {
+                "number": "১৪৮",
+                "detail": "পদের শপথ"
+            },
+            {
+                "number": "১৪৯",
+                "detail": "প্রচলিত আইনের হেফাজত"
+            },
+            {
+                "number": "১৫০",
+                "detail": "ক্রান্তিকালীন ও অস্থায়ী বিধানাবলী"
+            },
+            {
+                "number": "১৫১",
+                "detail": "রহিতকরণ"
+            },
+            {
+                "number": "১৫২ ",
+                "detail": "সংবিধানে ব্যবহৃত কয়েকটি শব্দের ব্যাখ্যা"
+            }
+        ]
+
+        const geneate = document.getElementById('geneate');
+        const answer = document.getElementById('answer');
+        const output = document.getElementById('out-text');
+        let lowerLimit = parseInt(document.getElementById('aus-lower-limit').value);
+        let upperLimit = parseInt(document.getElementById('aus-upper-limit').value);
+
+        geneate.addEventListener('click', () => {
+            lowerLimit = parseInt(document.getElementById('aus-lower-limit').value) - 1;
+            upperLimit = parseInt(document.getElementById('aus-upper-limit').value) - 1;
+            let geneatedIndex = Math.floor(Math.random() * (upperLimit - lowerLimit + 1) + lowerLimit);
+            let target = data[geneatedIndex];
+            let txt = `
+        <div class="out-number" id="out-number">
+            ${target.number}
+        </div>
+        <div style="opacity: 0;" class="out-text" id="out-text">
+            ${target.detail}
+        </div>`;
+            document.getElementById('out-text').style.opacity = 0;
+            document.getElementById('output').innerHTML = txt;
+            if (answer.hasAttribute('disabled')) {
+                answer.removeAttribute('disabled')
+            }
+        })
+        answer.addEventListener('click', () => {
+            document.getElementById('out-text').style.opacity = 1;
+        })
+
+
+    </script>
+</body>
+
+</html>
