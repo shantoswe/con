@@ -811,6 +811,14 @@
         let lowerLimit = parseInt(document.getElementById('aus-lower-limit').value);
         let upperLimit = parseInt(document.getElementById('aus-upper-limit').value);
 
+        document.getElementById('aus-lower-limit').addEventListener('change', () => {
+            lowerLimit = parseInt(document.getElementById('aus-lower-limit').value);
+        });
+
+        document.getElementById('aus-upper-limit').addEventListener('change', () => {
+            upperLimit = parseInt(document.getElementById('aus-upper-limit').value);
+        });
+
         geneate.addEventListener('click', () => {
             lowerLimit = parseInt(document.getElementById('aus-lower-limit').value) - 1;
             upperLimit = parseInt(document.getElementById('aus-upper-limit').value) - 1;
